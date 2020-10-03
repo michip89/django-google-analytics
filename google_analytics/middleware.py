@@ -14,6 +14,14 @@ class GoogleAnalyticsMiddleware(MiddlewareMixin):
             if any(exclude):
                 return response
 
+        # check if its enabled
+        try:
+            if not settings.GOOGLE_ANALYTICS_ENABLED:
+                return response
+
+        except (KeyError, TypeError):
+            raise Exception("GOOGLE_ANALYTICS_ENABLED not configured")
+
         # get the account id
         try:
             account = settings.GOOGLE_ANALYTICS['google_analytics_id']
